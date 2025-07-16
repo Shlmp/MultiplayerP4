@@ -5,6 +5,17 @@ TagManager:
   serializedVersion: 3
   tags:
   - SlideDoor
+  - PasswordCube1
+  - PasswordCube2
+  - PasswordCube3
+  - PasswordCube4
+  - PasswordCube5
+  - InputCube1
+  - InputCube2
+  - InputCube3
+  - InputCube4
+  - InputCube5
+  - ColorDoor
   layers:
   - Default
   - TransparentFX

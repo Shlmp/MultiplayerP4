@@ -52,6 +52,42 @@ public class Player : NetworkBehaviour
         HandleMouseLook();
         Move();
         HandleJumping();
+
+        if (!isLocalPlayer) return;
+
+        if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.T))
+        {
+            Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+            if (Physics.Raycast(ray, out RaycastHit hit, 3f))
+            {
+                Debug.DrawRay(ray.origin, ray.direction * 3f, Color.red, 1f);
+                Debug.Log("Raycast hit: " + hit.transform.name);
+
+                // Handle SlideDoor (Lever)
+                SlideDoor door = hit.transform.GetComponent<SlideDoor>();
+                if (door != null)
+                {
+                    NetworkIdentity netId = door.GetComponent<NetworkIdentity>();
+                    if (netId != null)
+                    {
+                        Debug.Log("Sending command to SlideDoor...");
+                        CmdRequestDoorToggle(netId);
+                    }
+                    return; // skip rest
+                }
+
+                // Handle InputCube (ColorCycler)
+                ColorCycler cube = hit.transform.GetComponent<ColorCycler>();
+                if (cube != null)
+                {
+                    Debug.Log("Sending command to ColorCycler...");
+                    cube.CmdCycleColor();
+                }
+            }
+        }
+
+
+
     }
 
     void Move()
@@ -87,6 +123,23 @@ public class Player : NetworkBehaviour
         transform.Rotate(Vector3.up * mouseX);
     }
 
+    [Command]
+    void CmdRequestDoorToggle(NetworkIdentity leverNetId)
+    {
+        Debug.Log("Command received on server");
+
+        SlideDoor lever = leverNetId.GetComponent<SlideDoor>();
+        if (lever != null)
+        {
+            lever.ToggleDoor();
+        }
+        else
+        {
+            Debug.LogWarning("Lever not found on server.");
+        }
+    }
+
+
     #endregion
 
     #region Start & Stop Callbacks
@@ -120,7 +173,28 @@ public class Player : NetworkBehaviour
     /// Called when the local player object has been set up.
     /// <para>This happens after OnStartClient(), as it is triggered by an ownership message from the server. This is an appropriate place to activate components or functionality that should only be active for the local player, such as cameras and input.</para>
     /// </summary>
-    public override void OnStartLocalPlayer() { }
+    public override void OnStartLocalPlayer()
+    {
+        base.OnStartLocalPlayer();
+
+        bool isPlayerA = isServer; // host = Player A
+        string[] hideTags = isPlayerA
+            ? new[] { "InputCube1", "InputCube2", "InputCube3", "InputCube4", "InputCube5" }
+            : new[] { "PasswordCube1", "PasswordCube2", "PasswordCube3", "PasswordCube4", "PasswordCube5" };
+
+        foreach (string tag in hideTags)
+        {
+            GameObject[] objects = GameObject.FindGameObjectsWithTag(tag);
+            foreach (GameObject obj in objects)
+            {
+                obj.SetActive(false);
+                Debug.Log($"[OnStartLocalPlayer] Deactivated object with tag {tag}: {obj.name}");
+            }
+        }
+    }
+
+
+
 
     /// <summary>
     /// Called when the local player object is being stopped.
