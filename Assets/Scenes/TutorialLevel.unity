@@ -2290,7 +2290,7 @@ GameObject:
   - component: {fileID: 111523494}
   - component: {fileID: 111523497}
   - component: {fileID: 111523498}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: InputCube1
   m_TagString: InputCube1
   m_Icon: {fileID: 0}
@@ -3683,9 +3683,9 @@ GameObject:
   - component: {fileID: 205333703}
   - component: {fileID: 205333706}
   - component: {fileID: 205333707}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: InputCube4
-  m_TagString: PasswordCube4
+  m_TagString: InputCube4
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7539,7 +7539,7 @@ GameObject:
   - component: {fileID: 396175462}
   - component: {fileID: 396175461}
   - component: {fileID: 396175465}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PasswordCube1
   m_TagString: PasswordCube1
   m_Icon: {fileID: 0}
@@ -14099,7 +14099,7 @@ GameObject:
   - component: {fileID: 735168212}
   - component: {fileID: 735168215}
   - component: {fileID: 735168216}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: InputCube2
   m_TagString: InputCube2
   m_Icon: {fileID: 0}
@@ -21920,6 +21920,18 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  passwordCubes:
+  - {fileID: 396175460}
+  - {fileID: 1135362330}
+  - {fileID: 1670530928}
+  - {fileID: 1908314255}
+  - {fileID: 1602317471}
+  inputCubes:
+  - {fileID: 111523492}
+  - {fileID: 735168210}
+  - {fileID: 1608054123}
+  - {fileID: 205333701}
+  - {fileID: 1756937264}
 --- !u!4 &1128894344
 Transform:
   m_ObjectHideFlags: 0
@@ -22036,7 +22048,7 @@ GameObject:
   - component: {fileID: 1135362332}
   - component: {fileID: 1135362331}
   - component: {fileID: 1135362335}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PasswordCube2
   m_TagString: PasswordCube2
   m_Icon: {fileID: 0}
@@ -27531,6 +27543,7 @@ GameObject:
   - component: {fileID: 1477845765}
   - component: {fileID: 1477845764}
   - component: {fileID: 1477845766}
+  - component: {fileID: 1477845767}
   m_Layer: 0
   m_Name: Wall (1)
   m_TagString: ColorDoor
@@ -27597,6 +27610,26 @@ MonoBehaviour:
   serverOnly: 0
   visibility: 0
   hasSpawned: 0
+--- !u!114 &1477845767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1477845763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3240d8ad0db5d4549b00ecd9ca396244, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  slideDistance: 3
+  speed: 2
+  rotationAngle: 45
+  openTarget: {fileID: 0}
+  closedTarget: {fileID: 0}
 --- !u!1001 &1480060472
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -30453,7 +30486,7 @@ GameObject:
   - component: {fileID: 1602317473}
   - component: {fileID: 1602317472}
   - component: {fileID: 1602317476}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PasswordCube5
   m_TagString: PasswordCube5
   m_Icon: {fileID: 0}
@@ -30766,7 +30799,7 @@ GameObject:
   - component: {fileID: 1608054125}
   - component: {fileID: 1608054128}
   - component: {fileID: 1608054129}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: InputCube3
   m_TagString: InputCube3
   m_Icon: {fileID: 0}
@@ -32327,7 +32360,7 @@ GameObject:
   - component: {fileID: 1670530930}
   - component: {fileID: 1670530929}
   - component: {fileID: 1670530933}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PasswordCube3
   m_TagString: PasswordCube3
   m_Icon: {fileID: 0}
@@ -34053,7 +34086,7 @@ GameObject:
   - component: {fileID: 1756937266}
   - component: {fileID: 1756937269}
   - component: {fileID: 1756937270}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: InputCube5
   m_TagString: InputCube5
   m_Icon: {fileID: 0}
@@ -36537,7 +36570,7 @@ GameObject:
   - component: {fileID: 1908314257}
   - component: {fileID: 1908314256}
   - component: {fileID: 1908314260}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PasswordCube4
   m_TagString: PasswordCube4
   m_Icon: {fileID: 0}
