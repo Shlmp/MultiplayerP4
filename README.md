@@ -5,6 +5,8 @@
 <div align = center>
 
 ## Features
+</div>
+I used Mirror to create the base for a Multiplayer 2 Person-Coop Video Game, where one player will see and interact with one side of the map, while the other will see and interact with the other side of the map. The main idea is to have both players have to deal with multiple puzzles where each one will directly affect each other. Using Mirror-only methods such as [Server], [SyncVar], [ClientRpc], [Command] in order to sync variables needed for all players for this exact reason. As such, methods like [SyncVar] for -----
 
 <br>
 
