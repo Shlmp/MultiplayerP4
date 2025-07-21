@@ -176,22 +176,8 @@ public class Player : NetworkBehaviour
     public override void OnStartLocalPlayer()
     {
         base.OnStartLocalPlayer();
-
-        bool isPlayerA = isServer; // host = Player A
-        string[] hideTags = isPlayerA
-            ? new[] { "InputCube1", "InputCube2", "InputCube3", "InputCube4", "InputCube5" }
-            : new[] { "PasswordCube1", "PasswordCube2", "PasswordCube3", "PasswordCube4", "PasswordCube5" };
-
-        foreach (string tag in hideTags)
-        {
-            GameObject[] objects = GameObject.FindGameObjectsWithTag(tag);
-            foreach (GameObject obj in objects)
-            {
-                obj.SetActive(false);
-                Debug.Log($"[OnStartLocalPlayer] Deactivated object with tag {tag}: {obj.name}");
-            }
-        }
     }
+
 
 
 

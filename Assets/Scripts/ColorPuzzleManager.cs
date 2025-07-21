@@ -17,25 +17,21 @@ public class ColorPuzzleManager : NetworkBehaviour
     };
 
     private Dictionary<string, Color> passwordColors = new Dictionary<string, Color>();
-    private GameObject door;
-
-    [Header("Assign in Inspector")]
-    public List<GameObject> passwordCubes;   // PasswordCube1...5
-    public List<GameObject> inputCubes;      // InputCube1...5
+    public GameObject door;
 
     public override void OnStartServer()
     {
         base.OnStartServer();
 
-        // Assign random colors to PasswordCubes
-        for (int i = 0; i < passwordCubes.Count; i++)
+        // Set password colors
+        for (int i = 1; i <= 5; i++)
         {
-            GameObject cube = passwordCubes[i];
+            string tag = "PasswordCube" + i;
+            GameObject cube = GameObject.FindGameObjectWithTag(tag);
             if (cube != null)
             {
-                string tagKey = "PasswordCube" + (i + 1);
                 Color randomColor = colorOptions[Random.Range(0, colorOptions.Count)];
-                passwordColors[tagKey] = randomColor;
+                passwordColors[tag] = randomColor;
 
                 Renderer rend = cube.GetComponent<Renderer>();
                 rend.material.color = randomColor;
@@ -46,87 +42,64 @@ public class ColorPuzzleManager : NetworkBehaviour
         Debug.Log("[ColorPuzzle] Password:");
         foreach (var pair in passwordColors)
             Debug.Log($"{pair.Key}: {pair.Value}");
-
-        // Find first door
-        GameObject[] doors = GameObject.FindGameObjectsWithTag("ColorDoor");
-        if (doors.Length > 0)
-        {
-            door = doors[0];
-        }
-        else
-        {
-            Debug.LogWarning("[ColorPuzzle] Door with tag 'ColorDoor' not found.");
-        }
-
-        RpcActivateInputCubesForLocalCamera();
+        RpcActivateAllInputCubes();
     }
 
     [Server]
     public void CheckIfPuzzleSolved()
     {
-        for (int i = 0; i < inputCubes.Count; i++)
+        for (int i = 1; i <= 5; i++)
         {
-            string passwordTag = "PasswordCube" + (i + 1);
-            GameObject inputCube = inputCubes[i];
+            string inputTag = "InputCube" + i;
+            string passwordTag = "PasswordCube" + i;
 
+            GameObject inputCube = GameObject.FindGameObjectWithTag(inputTag);
             if (inputCube == null || !passwordColors.ContainsKey(passwordTag))
                 return;
 
-            Color inputColor = inputCube.GetComponent<Renderer>().material.color;
             Color targetColor = passwordColors[passwordTag];
+            int targetIndex = colorOptions.IndexOf(targetColor);
 
-            if (inputColor != targetColor)
+            ColorCycler cycler = inputCube.GetComponent<ColorCycler>();
+            if (cycler == null)
                 return;
+
+            int currentIndex = cycler.GetCurrentColorIndex();
+
+            if (currentIndex != targetIndex)
+            {
+                door.SetActive(true);
+                puzzleSolved = false;
+                return;
+            }
         }
 
         if (!puzzleSolved)
         {
             puzzleSolved = true;
             Debug.Log("[ColorPuzzle] Puzzle solved!");
-
-            if (door != null)
-            {
-                SlideDoor slideDoor = door.GetComponent<SlideDoor>();
-                if (slideDoor != null)
-                    slideDoor.ToggleDoor();
-            }
+            door.SetActive(false);
         }
     }
+
 
     [ClientRpc]
-    void RpcActivateInputCubesForLocalCamera()
+    void RpcActivateAllInputCubes()
     {
-        // Only run on local client
-        if (!isLocalPlayerCameraAvailable())
-            return;
-
-        Camera cam = Camera.main;
-        if (cam == null)
+        for (int i = 1; i <= 5; i++)
         {
-            Debug.LogWarning("[ColorPuzzle] No main camera found.");
-            return;
-        }
-
-        for (int i = 0; i < inputCubes.Count; i++)
-        {
-            GameObject cube = inputCubes[i];
-            if (cube == null) continue;
-
-            // Check if cube is in front of camera (rough visibility check)
-            Vector3 dir = cube.transform.position - cam.transform.position;
-            if (Vector3.Dot(cam.transform.forward, dir.normalized) > 0.5f)
-            {
-                cube.SetActive(true);
-            }
-            else
-            {
-                cube.SetActive(false); // hide if not for this player
-            }
+            string tag = "InputCube" + i;
+            GameObject obj = GameObject.FindGameObjectWithTag(tag);
+            if (obj != null)
+                obj.SetActive(true);
         }
     }
 
-    private bool isLocalPlayerCameraAvailable()
+    bool ColorsAreEqual(Color a, Color b, float tolerance = 0.01f)
     {
-        return Camera.main != null && Camera.main.CompareTag("MainCamera");
+        return Mathf.Abs(a.r - b.r) < tolerance &&
+               Mathf.Abs(a.g - b.g) < tolerance &&
+               Mathf.Abs(a.b - b.b) < tolerance;
     }
+
 }

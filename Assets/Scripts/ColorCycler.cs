@@ -13,42 +13,44 @@ public class ColorCycler : NetworkBehaviour
         Color.magenta
     };
 
+    [SyncVar]
     private int currentColorIndex = 0;
+
     private Renderer rend;
-    private ColorPuzzleManager puzzleManager;
 
     void Start()
     {
         rend = GetComponent<Renderer>();
-        rend.material.color = colorOptions[currentColorIndex];
-
-        if (isServer)
-        {
-            puzzleManager = FindObjectOfType<ColorPuzzleManager>();
-        }
+        UpdateColor();
     }
 
     [Command(requiresAuthority = false)]
     public void CmdCycleColor()
     {
         currentColorIndex = (currentColorIndex + 1) % colorOptions.Count;
-        Color newColor = colorOptions[currentColorIndex];
+        RpcUpdateColor(currentColorIndex);
 
-        RpcApplyColor(newColor);
-
-        if (puzzleManager == null)
-            puzzleManager = FindObjectOfType<ColorPuzzleManager>();
-
-        if (puzzleManager != null)
-            puzzleManager.CheckIfPuzzleSolved();
+        // Optionally re-check puzzle after color is changed
+        ColorPuzzleManager manager = FindObjectOfType<ColorPuzzleManager>();
+        if (manager != null)
+            manager.CheckIfPuzzleSolved();
     }
 
     [ClientRpc]
-    private void RpcApplyColor(Color color)
+    private void RpcUpdateColor(int index)
     {
-        if (rend == null)
-            rend = GetComponent<Renderer>();
+        currentColorIndex = index;
+        UpdateColor();
+    }
 
-        rend.material.color = color;
+    private void UpdateColor()
+    {
+        if (rend == null) rend = GetComponent<Renderer>();
+        rend.material.color = colorOptions[currentColorIndex];
+    }
+
+    public int GetCurrentColorIndex()
+    {
+        return currentColorIndex;
     }
 }

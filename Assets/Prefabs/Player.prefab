@@ -247,7 +247,7 @@ MonoBehaviour:
   rb: {fileID: 5823544657379398982}
   speed: 6
   jumpForce: 5
-  mouseSensitivity: 100
+  mouseSensitivity: 150
   groundCheckDistance: 0.2
   groundMask:
     serializedVersion: 2

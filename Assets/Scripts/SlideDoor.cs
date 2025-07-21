@@ -86,7 +86,6 @@ public class SlideDoor : NetworkBehaviour
     public void ToggleDoor()
     {
         if (!isServer) return;
-
         isOpened = !isOpened;
         Debug.Log($"[Server] Door is now {(isOpened ? "Opened" : "Closed")}");
     }
