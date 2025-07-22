@@ -6,7 +6,19 @@
 
 ## Features
 </div>
-I used Mirror to create the base for a Multiplayer 2 Person-Coop Video Game, where one player will see and interact with one side of the map, while the other will see and interact with the other side of the map. The main idea is to have both players have to deal with multiple puzzles where each one will directly affect each other. Using Mirror-only methods such as [Server], [SyncVar], [ClientRpc], [Command] in order to sync variables needed for all players for this exact reason. As such, methods like [SyncVar] for -----
+I used Mirror to create the base for a Multiplayer 2 Person-Coop Video Game, where one player will see and interact with one side of the map, while the other will see and interact with the other side of the map. The main idea is to have both players have to deal with multiple puzzles where each one will directly affect each other. Using Mirror-only methods such as [Server], [SyncVar], [ClientRpc], [Command] in order to sync variables needed for all players for this exact reason.
+
+<br>
+<br>
+
+**[Command]** is used to send local information of a player to the server, in this instance it as used to dictate if the lever was pulled or not and as such, know whether or not to toggle the sliding door or to identify if a cube's color has been interacted or not, and as such, cycle through the other colors.
+
+**[ClientRpc]** is used to show ALL clients what is desired, such as the colors of all cubes, and sync them to prevent mistakes, activating all interactable cubes.
+
+**[Server]** is used for all the logic behind the game, such as checking if the colors of the interactable cubes coincide with the other non-interactable cubes.
+
+**[SyncVar]** is used to automatically synchronize the value of variables, such as the color index (since the colors are inside a list nd the order never changes) or a bool to check if a puzzle is solved.
+
 
 <br>
 
